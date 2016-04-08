@@ -1,0 +1,15 @@
+{
+    "kind": "Service",
+    "apiVersion": "v1",
+    "metadata": {
+        "name": "mars-game-controller"
+    },
+    "spec": {
+        "selector": {
+            "app": "mars-game-controller"
+        },
+        "ports": [
+            { "protocol": "TCP", "port": 8080 }
+        ]
+    }
+}
