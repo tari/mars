@@ -4,6 +4,9 @@ http://kubernetes.io/docs/getting-started-guides/docker/
 
 # Kubernetes setup
 
+cd kubernetes
+./hack/local-up-cluster.sh
+
 ```
 export K8S_VERSION=1.2.2
 docker run \
@@ -40,11 +43,12 @@ rm -rf /var/lib/kubelet
 
 # Application run
 
+kubectl create namespace kube-system
 kubectl create -f skydns-rc.yaml
 kubectl create -f skydns-svc.yaml
 
-kubectl create -f controller-pod.yaml
-kubectl create -f controller-service.json
+kubectl create -f controller-rc.yaml
+kubectl create -f controller-svvc.json
 kubectl create -f dashboard-pod.yaml
 kubectl create -f dashboard-service.json
 
