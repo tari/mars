@@ -24,8 +24,8 @@ docker run \
         --address="0.0.0.0" \
         --api-servers=http://localhost:8080 \
         --config=/etc/kubernetes/manifests \
-        --cluster-dns=10.254.0.10 \
-        --cluster-dns=kubernetes.local \
+        --cluster-dns=10.0.0.10 \
+        --cluster-dns=cluster.local \
         --allow-privileged=true --v=2
 ```
 
