@@ -1,5 +1,5 @@
 kind: Service
-apiVersion: v1beta1
+apiVersion: v1
 id: skydns
 namespace: default
 protocol: UDP
