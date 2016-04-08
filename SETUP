@@ -2,7 +2,7 @@ Kubernetes on the VM
 
 http://kubernetes.io/docs/getting-started-guides/docker/
 
-# Set up a pod
+# Kubernetes setup
 
 ```
 export K8S_VERSION=1.2.2
@@ -24,7 +24,28 @@ docker run \
         --address="0.0.0.0" \
         --api-servers=http://localhost:8080 \
         --config=/etc/kubernetes/manifests \
+        --cluster-dns=10.254.0.10 \
+        --cluster-dns=kubernetes.local \
         --allow-privileged=true --v=2
 ```
 
-kubectl create -f game-pod.json
+And tearing down the cluster:
+
+```
+docker kill $(docker ps -q)
+docker rm $(docker ps -aq)
+umount `cat /proc/mounts | grep /var/lib/kubelet | awk '{print $2}'`
+rm -rf /var/lib/kubelet
+```
+
+# Application run
+
+kubectl create -f skydns-rc.yaml
+kubectl create -f skydns-svc.yaml
+
+kubectl create -f controller-pod.yaml
+kubectl create -f controller-service.json
+kubectl create -f dashboard-pod.yaml
+kubectl create -f dashboard-service.json
+
+kubectl rolling-update mars-game -f game-pod.yaml
