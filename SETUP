@@ -2,6 +2,9 @@ Kubernetes on the VM
 
 http://kubernetes.io/docs/getting-started-guides/docker/
 
+# Set up a pod
+
+```
 export K8S_VERSION=1.2.2
 docker run \
     --volume=/:/rootfs:ro \
@@ -22,3 +25,6 @@ docker run \
         --api-servers=http://localhost:8080 \
         --config=/etc/kubernetes/manifests \
         --allow-privileged=true --v=2
+```
+
+kubectl create -f game-pod.json
