@@ -147,7 +147,7 @@ def team_strategy(parsed_json):
 ##                    team_shield_up(team_name, team_auth)
 ##            return val > 0.0
             def toggle():
-                coeffs = [0.11676917483781257, 0.9047343071907881, 0.6212645848159639, -4.432583912172165, 2.8594711224701443, -0.30865309005707386]
+                coeffs = [0.11676917483781257, 0.9548160574220481, 0.6042193115045558, -4.432583912172165, 2.8594711224701443, -0.30865309005707386]
                 if shield:
                     if l < coeffs[0]: return False
                     if e > coeffs[1]: return False
