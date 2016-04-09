@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: sensor
-          image: emccode/mars-challenge-client
+          image: tari/mars-game-sensor
           ports:
             - containerPort: 8080
               protocol: TCP
