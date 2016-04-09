@@ -1,0 +1,15 @@
+{
+    "kind": "Service",
+    "apiVersion": "v1",
+    "metadata": {
+        "name": "mars-game-sensor"
+    },
+    "spec": {
+        "selector": {
+            "app": "mars-game-sensor"
+        },
+        "ports": [
+            { "protocol": "TCP", "port": 8080 }
+        ]
+    }
+}

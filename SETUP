@@ -51,3 +51,5 @@ kubectl create -f dashboard-pod.yaml
 kubectl create -f dashboard-service.json
 
 kubectl rolling-update mars-game -f game-pod.yaml
+
+kubectl exec busybox
