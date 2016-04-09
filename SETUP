@@ -43,9 +43,7 @@ rm -rf /var/lib/kubelet
 
 # Application run
 
-kubectl create namespace kube-system
-kubectl create -f skydns-rc.yaml
-kubectl create -f skydns-svc.yaml
+Use kubernetes/hack/local-up-cluster.sh to start the cluster
 
 kubectl create -f controller-rc.yaml
 kubectl create -f controller-svvc.json
