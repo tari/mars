@@ -13,8 +13,8 @@ import json
 # Global Variables
 team_name = 'Encephalon'                        # The Name of the Team
 team_auth = ''                                  # The Team Authentication Tocken
-server_url = 'http://localhost:8000/api'   # URL of the SERVER API
-server_ws = 'ws://localhost:8000/ws'       # URL of the Sensors Websocket
+server_url = 'http://localhost:80/api'   # URL of the SERVER API
+server_ws = 'ws://localhost:80/ws'       # URL of the Sensors Websocket
 
 
 # Server Method Calls ------------------------------------------------
@@ -95,27 +95,72 @@ def data_recording(parsed_json):
 
 
 def team_strategy(parsed_json):
-    """
-  Contains the Team's strategy.
-  :param parsed_json: Readings from the Mars Sensors
-  :return:Nothing
-  """
-    # The Strategy for this client is to have the shield up constantly until it is depleted.
-    # Then wait until is charged again to a 10% and enable it again
+    false = False
+    d = eval(parsed_json)
 
-    # Get the Team List
-    teams_list = parsed_json['teams']
+##    {
+##        "running":false,
+##        "startedAt":"2015-08-04T00:44:40.854306651Z",
+##        "readings":{
+##            "solarFlare":false,
+##            "temperature":-3.960996217958863,
+##            "radiation":872
+##        },
+##        "teams":[
+##            {
+##                "name":"TheBorgs",
+##                "energy":100,
+##                "life":0,
+##                "shield":false
+##            },
+##            {
+##                "name":"QuickFandango",
+##                "energy":100,
+##                "life":0,
+##                "shield":false
+##            },
+##            {
+##                "name":"InTheBigMessos",
+##                "energy":32,
+##                "life":53,
+##                "shield":false
+##            },{
+##                "name":"MamaMia",
+##                "energy":100,
+##                "life":100,
+##                "shield":false
+##            }
+##        ]
+##    }
 
-    # Find this team
-    for team in teams_list:
+    for team in d['teams']:
         if team['name'] == team_name:
-            if team['shield'] <> True and team['energy'] > 10:
-                # Check if Shield is up and shield energy is larger than 10%
-                print("\nGameMove: Team: {0} Action: Shield UP!| Energy: {1}".format(team_name, str(team['energy'])))
-                team_shield_up(team_name, team_auth)
-            else:
-               print("\nTeam: {0} Action: None| Energy: {1}".format(team_name, str(team['energy'])))
-
+            l=team['life']/100.0; e=team['energy']/100.0; r=d["readings"]["radiation"]/1000.0; t=(d["readings"]["temperature"]--142.0)/(35.0--142.0)
+##            coeffs = [0.013881272498496022, 0.45039997868312986, -0.9514054948793587, 0.0837629045368744, 0.0, -2.087719814806384, 1.8122986400733951, 1.8369811394811546, -0.23702946321884122, 0.2767876048134126]
+##            if team['shield']:
+##                val = coeffs[0]*l + coeffs[1]*e + coeffs[2]*r + coeffs[3]*t + coeffs[4]
+##                if val > 0.0:
+##                    team_shield_down(team_name, team_auth)
+##            else:
+##                val = coeffs[5]*l + coeffs[6]*e + coeffs[7]*r + coeffs[8]*t + coeffs[9]
+##                if val > 0.0:
+##                    team_shield_up(team_name, team_auth)
+##            return val > 0.0
+            def toggle():
+                coeffs = [0.11676917483781257, 0.9548160574220481, 0.6042193115045558, -4.432583912172165, 2.8594711224701443, -0.30865309005707386]
+                if shield:
+                    if l < coeffs[0]: return False
+                    if e > coeffs[1]: return False
+                    if r < coeffs[2]: return True
+                    return False
+                else:
+                    if l < coeffs[3]: return True
+                    if e > coeffs[4]: return True
+                    if r > coeffs[5]: return True
+                    return False
+            if toggle():
+                if team['shield']: team_shield_down(team_name, team_auth)
+                else:              team_shield_up(team_name, team_auth)
 
 # Register the Team
 
@@ -147,4 +192,4 @@ while True:
 
 ws.close()
 
-print "Good bye!"
+print("Good bye!")
