@@ -7,6 +7,7 @@ import time
 import logging
 import logging.config
 import os
+import re
 
 import websocket
 import requests
@@ -20,8 +21,26 @@ logger = logging.getLogger("root")
 
 
 # Global Variables
-sensor_endpoint = os.environ['SENSOR_ENDPOINT']
-controller_endpoint = os.environ['GC_ENDPOINT']
+def get_sensor_hosts():
+    sensor_names = set()
+    for (k, v) in os.environ.iteritems():
+        m = re.match(r'^(MARS_GAME_SENSOR[^_]*)_SERVICE', k)
+        if m:
+            sensor_names.add(m.group(1))
+    sensor_hosts = []
+    for name in sensor_names:
+        sensor_hosts.append('{}:{}'.format(
+            os.environ[name + '_SERVICE_HOST'],
+            os.environ[name + '_SERVICE_PORT']
+        ))
+    print 'Got sensor hosts', sensor_hosts
+    return sensor_hosts
+
+sensor_endpoint = get_sensor_hosts()[0]
+controller_endpoint = '{}:{}'.format(
+        os.environ['MARS_GAME_CONTROLLER_SERVICE_HOST'],
+        os.environ['MARS_GAME_CONTROLLER_SERVICE_PORT']
+)
 
 controller_url = 'http://' + controller_endpoint + '/api/readings'  #'http://localhost:8080/api/readings'
 admin_password = '1234'

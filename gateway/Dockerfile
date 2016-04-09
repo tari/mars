@@ -14,10 +14,10 @@ RUN apt-get update &&\
 RUN pip install websocket-client
 
 RUN cd /opt &&\
-  git clone https://github.com/emccode/mars-challenge &&\
-  cd /opt/mars-challenge/gateway/python/
+  git clone https://github.com/tari/mars && \
+  cd /opt/mars/gateway
 
 # Set the default directory where CMD will execute
-WORKDIR /opt/mars-challenge/gateway/python/
+WORKDIR /opt/mars/gateway/
 
 CMD python gateway-python.py

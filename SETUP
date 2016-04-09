@@ -47,6 +47,12 @@ Use kubernetes/hack/local-up-cluster.sh to start the cluster
 
 kubectl create -f controller-rc.yaml
 kubectl create -f controller-svvc.json
+
+kubectl create -f sensor-rc.yaml
+kubectl create -f sensor-svc.json
+
+kubectl create -f gateway-rc.yaml
+
 kubectl create -f dashboard-pod.yaml
 kubectl create -f dashboard-service.json
 
