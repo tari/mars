@@ -13,8 +13,8 @@ import json
 # Global Variables
 team_name = 'Encephalon'                        # The Name of the Team
 team_auth = ''                                  # The Team Authentication Tocken
-server_url = 'http://localhost:8000/api'   # URL of the SERVER API
-server_ws = 'ws://localhost:8000/ws'       # URL of the Sensors Websocket
+server_url = 'http://localhost:80/api'   # URL of the SERVER API
+server_ws = 'ws://localhost:80/ws'       # URL of the Sensors Websocket
 
 
 # Server Method Calls ------------------------------------------------
@@ -133,20 +133,34 @@ def team_strategy(parsed_json):
 ##        ]
 ##    }
 
-    for team in parsed_json['teams']:
+    for team in d['teams']:
         if team['name'] == team_name:
-            l=team['life']/100.0; e=team['energy']/100.0; r=parsed_json["readings"]["radiation"]/1000.0; t=(parsed_json["readings"]["temperature"]--142.0)/(35.0--142.0)
-            coeffs = [0.013881272498496022, 0.45039997868312986, -0.9514054948793587, 0.0837629045368744, 0.0, -2.087719814806384, 1.8122986400733951, 1.8369811394811546, -0.23702946321884122, 0.2767876048134126]
-            if team['shield']:
-                val = coeffs[0]*l + coeffs[1]*e + coeffs[2]*r + coeffs[3]*t + coeffs[4]
-                if val > 0.0:
-                    team_shield_down(team_name, team_auth)
-            else:
-                val = coeffs[5]*l + coeffs[6]*e + coeffs[7]*r + coeffs[8]*t + coeffs[9]
-                if val > 0.0:
-                    team_shield_up(team_name, team_auth)
-            return val > 0.0
-
+            l=team['life']/100.0; e=team['energy']/100.0; r=d["readings"]["radiation"]/1000.0; t=(d["readings"]["temperature"]--142.0)/(35.0--142.0)
+##            coeffs = [0.013881272498496022, 0.45039997868312986, -0.9514054948793587, 0.0837629045368744, 0.0, -2.087719814806384, 1.8122986400733951, 1.8369811394811546, -0.23702946321884122, 0.2767876048134126]
+##            if team['shield']:
+##                val = coeffs[0]*l + coeffs[1]*e + coeffs[2]*r + coeffs[3]*t + coeffs[4]
+##                if val > 0.0:
+##                    team_shield_down(team_name, team_auth)
+##            else:
+##                val = coeffs[5]*l + coeffs[6]*e + coeffs[7]*r + coeffs[8]*t + coeffs[9]
+##                if val > 0.0:
+##                    team_shield_up(team_name, team_auth)
+##            return val > 0.0
+            def toggle():
+                coeffs = [0.11676917483781257, 0.9047343071907881, 0.6212645848159639, -4.432583912172165, 2.8594711224701443, -0.30865309005707386]
+                if shield:
+                    if l < coeffs[0]: return False
+                    if e > coeffs[1]: return False
+                    if r < coeffs[2]: return True
+                    return False
+                else:
+                    if l < coeffs[3]: return True
+                    if e > coeffs[4]: return True
+                    if r > coeffs[5]: return True
+                    return False
+            if toggle():
+                if team['shield']: team_shield_down(team_name, team_auth)
+                else:              team_shield_up(team_name, team_auth)
 
 # Register the Team
 
