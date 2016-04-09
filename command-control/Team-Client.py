@@ -13,8 +13,8 @@ import json
 # Global Variables
 team_name = 'Encephalon'                        # The Name of the Team
 team_auth = ''                                  # The Team Authentication Tocken
-server_url = 'http://localhost:80/api'   # URL of the SERVER API
-server_ws = 'ws://localhost:80/ws'       # URL of the Sensors Websocket
+server_url = 'http://192.241.209.225:80/api'   # URL of the SERVER API
+server_ws = 'ws://192.241.209.225:80/ws'       # URL of the Sensors Websocket
 
 
 # Server Method Calls ------------------------------------------------
@@ -96,7 +96,7 @@ def data_recording(parsed_json):
 
 def team_strategy(parsed_json):
     false = False
-    d = eval(parsed_json)
+    d = parsed_json
 
 ##    {
 ##        "running":false,
@@ -148,7 +148,7 @@ def team_strategy(parsed_json):
 ##            return val > 0.0
             def toggle():
                 coeffs = [0.11676917483781257, 0.9548160574220481, 0.6042193115045558, -4.432583912172165, 2.8594711224701443, -0.30865309005707386]
-                if shield:
+                if team['shield']:
                     if l < coeffs[0]: return False
                     if e > coeffs[1]: return False
                     if r < coeffs[2]: return True
@@ -185,6 +185,7 @@ while True:
     print("Game Status: " + str(parsed_json['running']))
 
     if not parsed_json['running']:
+        team_shield_up(team_name, team_auth)
         print('Waiting for the Game Start')
     else:
         data_recording(parsed_json)
